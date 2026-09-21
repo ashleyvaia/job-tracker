@@ -3,8 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import get_db
 from sqlalchemy.orm import Session
 from sqlalchemy import text
+from app.routers import applications
 
 app = FastAPI()
+
+app.include_router(applications.router)
 
 app.add_middleware(
   CORSMiddleware,
