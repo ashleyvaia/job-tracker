@@ -1,40 +1,57 @@
-import {useEffect, useState} from 'react';
-import AddApplicationModal from './AddApplicationModal';
+import { useEffect, useState } from "react";
+import AddApplicationModal from "./AddApplicationModal";
+import ApplicationRow from "./ApplicationRow";
 
-
-type applicationStatus = "applied" | "interviewing" | "offer" | "rejected" | "ghosted" | "withdrawn";
+export type applicationStatus =
+  | "applied"
+  | "interviewing"
+  | "offer"
+  | "rejected"
+  | "ghosted"
+  | "withdrawn";
 
 export interface Application {
-  id: number
-  company: string
-  role: string
-  location: string | null
-  status: applicationStatus
-  interview_round: number | null
-  url: string
-  date_applied: string
-  notes: string | null
-  last_checked: string | null
-  is_stale: boolean
-  created_at: string
-  updated_at: string
+  id: number;
+  company: string;
+  role: string;
+  location: string | null;
+  status: applicationStatus;
+  interview_round: number | null;
+  url: string;
+  date_applied: string;
+  notes: string | null;
+  last_checked: string | null;
+  is_stale: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 function App() {
-  const [applications, setApplications] = useState<Application[]>([])
+  const [applications, setApplications] = useState<Application[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:8000/applications/')
-    .then((res) => res.json())
-    .then((data: Application[]) => setApplications(data))
-    .catch((err) => console.error('Failed to fetch applications:', err))
-  }, [])
+    fetch("http://localhost:8000/applications/")
+      .then((res) => res.json())
+      .then((data: Application[]) => setApplications(data))
+      .catch((err) => console.error("Failed to fetch applications:", err));
+  }, []);
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   function handleCreated(newApp: Application) {
-    setApplications((prev) => [...prev, newApp])
-    setIsModalOpen(false)
+    setApplications((prev) => [...prev, newApp]);
+    setIsModalOpen(false);
+  }
+
+  function handleStatusChange(updatedApp: Application) {
+    setApplications((prev) =>
+      prev.map((app) => (app.id === updatedApp.id ? updatedApp : app)),
+    );
+  }
+
+  function handleDelete(id: number) {
+    setApplications((prev) =>
+      prev.filter((app) => app.id !== id))
   }
 
   return (
@@ -45,7 +62,8 @@ function App() {
       <AddApplicationModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onCreated={handleCreated}/>
+        onCreated={handleCreated}
+      />
       <table>
         <thead>
           <tr>
@@ -60,23 +78,17 @@ function App() {
         </thead>
         <tbody>
           {applications.map((app) => (
-            <tr key={app.id}>
-              <td>{app.id}</td>
-              <td>{app.company}</td>
-              <td>{app.role}</td>
-              <td>{app.location}</td>
-              <td>{app.notes}</td>
-              <td>{app.date_applied}</td>
-              <td>{app.status}</td>
-            </tr>
+            <ApplicationRow
+              key={app.id}
+              application={app}
+              onStatusChange={handleStatusChange}
+              onDelete={handleDelete}
+            />
           ))}
         </tbody>
       </table>
     </>
-  )
-  
-
+  );
 }
 
-export default App
-
+export default App;
