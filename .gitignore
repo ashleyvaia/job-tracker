@@ -16,3 +16,6 @@ frontend/dist/
 # OS
 .DS_Store
 Thumbs.db
+
+# Working notes, not ready to publish yet (commit deliberately with `git add -f`)
+DECISIONS.md
