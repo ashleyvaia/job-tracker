@@ -21,7 +21,7 @@ def create_application(
         company=data.company,
         role=data.role,
         location=data.location,
-        url=data.url,
+        url=str(data.url),
         date_applied=data.date_applied,
         notes=data.notes,
     )
@@ -85,6 +85,8 @@ def update_application(
     update_data = data.model_dump(exclude_unset=True)
 
     for field, value in update_data.items():
+        if field == "url":
+            value = str(value)
         setattr(application, field, value)
 
     db.commit()

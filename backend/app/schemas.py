@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 from datetime import date, datetime
 from typing import Optional
 from app.models import ApplicationStatus
@@ -7,7 +7,7 @@ class ApplicationCreate(BaseModel):
   company: str
   role: str
   location: str
-  url: str
+  url: HttpUrl
   date_applied: date
   notes: Optional[str] = None
 
@@ -17,7 +17,7 @@ class ApplicationUpdate(BaseModel):
   location: Optional[str] = None
   status: Optional[ApplicationStatus] = None
   interview_round: Optional[int] = None
-  url: Optional[str] = None
+  url: Optional[HttpUrl] = None
   date_applied: Optional[date] = None
   notes: Optional[str] = None
 
@@ -30,7 +30,7 @@ class ApplicationRead(BaseModel):
   location: str
   status: ApplicationStatus
   interview_round: Optional[int]
-  url: str
+  url: HttpUrl
   date_applied: date
   notes: Optional[str]
   last_checked: Optional[datetime]
