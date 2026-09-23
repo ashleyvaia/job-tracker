@@ -17,6 +17,7 @@ class ApplicationStatus(str, Enum):
 class Application(Base):
   __tablename__ = "applications"
 
+  user_id: Mapped[str] = mapped_column()
   id: Mapped[int] = mapped_column(primary_key=True)
   company: Mapped[str] = mapped_column()
   role: Mapped[str] = mapped_column()

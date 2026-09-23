@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import AddApplicationModal from "./AddApplicationModal";
 import ApplicationRow from "./ApplicationRow";
+import { authFetch } from "./authFetch.ts";
+import { useAuth, SignInButton, UserButton } from "@clerk/react";
 
 export type applicationStatus =
   | "applied"
@@ -27,14 +29,17 @@ export interface Application {
 }
 
 function App() {
+  const { isSignedIn, getToken } = useAuth();
   const [applications, setApplications] = useState<Application[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/applications/")
-      .then((res) => res.json())
-      .then((data: Application[]) => setApplications(data))
-      .catch((err) => console.error("Failed to fetch applications:", err));
-  }, []);
+    if (isSignedIn) {
+      authFetch("http://localhost:8000/applications/", {}, getToken)
+        .then((res) => res.json())
+        .then((data: Application[]) => setApplications(data))
+        .catch((err) => console.error("Failed to fetch applications:", err));
+    }
+  }, [getToken, isSignedIn]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -50,12 +55,12 @@ function App() {
   }
 
   function handleDelete(id: number) {
-    setApplications((prev) =>
-      prev.filter((app) => app.id !== id))
+    setApplications((prev) => prev.filter((app) => app.id !== id));
   }
 
-  return (
+  return isSignedIn ? (
     <>
+      <UserButton />
       <button type="button" onClick={() => setIsModalOpen(true)}>
         Add new application
       </button>
@@ -88,6 +93,8 @@ function App() {
         </tbody>
       </table>
     </>
+  ) : (
+    <SignInButton mode="modal" />
   );
 }
 

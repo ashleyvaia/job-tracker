@@ -1,5 +1,7 @@
 import type { Application, applicationStatus } from "./App";
 import { useState } from "react";
+import { useAuth } from "@clerk/react";
+import { authFetch } from "./authFetch";
 
 interface ApplicationRowProps {
   application: Application;
@@ -12,25 +14,34 @@ function ApplicationRow({
   onStatusChange,
   onDelete,
 }: ApplicationRowProps) {
+  const { getToken } = useAuth();
 
   function handleStatusChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    const newStatus = event.target.value
-    fetch(`http://localhost:8000/applications/${application.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({status: newStatus}),
-    })
-    .then((res) => res.json())
-    .then((updatedApp: Application) => onStatusChange(updatedApp))
-    .catch((err) => console.error('Failed to update status:', err))
+    const newStatus = event.target.value;
+    authFetch(
+      `http://localhost:8000/applications/${application.id}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      },
+      getToken,
+    )
+      .then((res) => res.json())
+      .then((updatedApp: Application) => onStatusChange(updatedApp))
+      .catch((err) => console.error("Failed to update status:", err));
   }
 
   function handleDelete() {
-    fetch(`http://localhost:8000/applications/${application.id}`, {
-      method: 'DELETE',
-    })
-    .then(() => onDelete(application.id))
-    .catch((err) => console.error('Failed to delete application:', err))
+    authFetch(
+      `http://localhost:8000/applications/${application.id}`,
+      {
+        method: "DELETE",
+      },
+      getToken,
+    )
+      .then(() => onDelete(application.id))
+      .catch((err) => console.error("Failed to delete application:", err));
   }
 
   return (
@@ -52,10 +63,12 @@ function ApplicationRow({
         </select>
       </td>
       <td>
-        <button type="button" onClick={handleDelete}>Delete application</button>
+        <button type="button" onClick={handleDelete}>
+          Delete application
+        </button>
       </td>
     </tr>
   );
 }
 
-export default ApplicationRow
+export default ApplicationRow;

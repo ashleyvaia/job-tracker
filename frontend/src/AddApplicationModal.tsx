@@ -1,5 +1,7 @@
 import type { Application } from "./App";
-import { useState} from "react";
+import { useState } from "react";
+import { useAuth } from "@clerk/react";
+import { authFetch } from "./authFetch";
 
 interface AddApplicationModalProps {
   isOpen: boolean;
@@ -19,26 +21,39 @@ function AddApplicationModal({
   const [dateApplied, setDateApplied] = useState("");
   const [notes, setNotes] = useState("");
 
+  const { getToken } = useAuth();
+
   if (!isOpen) return null;
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    fetch('http://localhost:8000/applications/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({company, role, location, url, date_applied: dateApplied, notes}),
-    })
-    .then((res) => res.json())
-    .then((newApplication: Application) => {
-      onCreated(newApplication)
-      setCompany('')
-      setRole('')
-      setLocation('')
-      setUrl('')
-      setDateApplied('')
-      setNotes('')
-    })
-    .catch((err) => console.error('Failed to add application:', err))
+    event.preventDefault();
+    authFetch(
+      "http://localhost:8000/applications/",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          company,
+          role,
+          location,
+          url,
+          date_applied: dateApplied,
+          notes,
+        }),
+      },
+      getToken,
+    )
+      .then((res) => res.json())
+      .then((newApplication: Application) => {
+        onCreated(newApplication);
+        setCompany("");
+        setRole("");
+        setLocation("");
+        setUrl("");
+        setDateApplied("");
+        setNotes("");
+      })
+      .catch((err) => console.error("Failed to add application:", err));
   }
 
   return (
@@ -86,10 +101,12 @@ function AddApplicationModal({
           placeholder="Notes"
         />
         <button type="submit">Add application</button>
-        <button type="button" onClick={onClose}>Cancel</button>
+        <button type="button" onClick={onClose}>
+          Cancel
+        </button>
       </form>
     </div>
   );
 }
 
-export default AddApplicationModal
+export default AddApplicationModal;
