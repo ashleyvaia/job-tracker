@@ -1,4 +1,4 @@
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, computed_field
 from datetime import date, datetime
 from typing import Optional
 from app.models import ApplicationStatus
@@ -37,3 +37,13 @@ class ApplicationRead(BaseModel):
   is_stale: bool
   created_at: datetime
   updated_at: datetime
+
+  @computed_field
+  @property
+  def days_since_applied(self) -> int:
+    return (date.today() - self.date_applied).days
+
+  @computed_field
+  @property
+  def likely_stale(self) -> bool:
+    return self.days_since_applied > 14 and self.status == "applied"
