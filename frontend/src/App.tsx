@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import AddApplicationModal from "./AddApplicationModal";
 import ApplicationRow from "./ApplicationRow";
+import Dashboard from "./Dashboard.tsx";
 import { authFetch } from "./authFetch.ts";
 import { useAuth, SignInButton, UserButton } from "@clerk/react";
 
@@ -69,6 +70,7 @@ function App() {
         onClose={() => setIsModalOpen(false)}
         onCreated={handleCreated}
       />
+      <Dashboard />
       <table>
         <thead>
           <tr>
