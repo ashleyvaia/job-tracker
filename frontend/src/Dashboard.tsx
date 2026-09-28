@@ -1,6 +1,7 @@
 import { useAuth } from "@clerk/react";
 import { useEffect, useState } from "react";
 import { authFetch } from "./authFetch";
+import { API_URL } from "./apiUrl";
 import { STATUS_COLORS } from "./statusColors";
 import { formatDate } from "./formatDate";
 import { Bar } from "react-chartjs-2";
@@ -90,7 +91,7 @@ function Dashboard({ refreshTrigger }: DashboardProps) {
   useEffect(() => {
     if (isSignedIn) {
       setError(null);
-      authFetch("http://localhost:8000/dashboard/", {}, getToken)
+      authFetch(`${API_URL}/dashboard/`, {}, getToken)
         .then((res) => {
           if (!res.ok) throw new Error("Failed to load dashboard stats.");
           return res.json();

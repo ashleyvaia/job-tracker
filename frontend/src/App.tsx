@@ -5,6 +5,7 @@ import Dashboard from "./Dashboard.tsx";
 import ThemeToggle from "./ThemeToggle.tsx";
 import Logo from "./Logo.tsx";
 import { authFetch } from "./authFetch.ts";
+import { API_URL } from "./apiUrl.ts";
 import { useAuth, SignInButton, UserButton } from "@clerk/react";
 
 export type applicationStatus =
@@ -43,7 +44,7 @@ function App() {
     if (isSignedIn) {
       setIsLoadingApplications(true);
       setApplicationsError(null);
-      authFetch("http://localhost:8000/applications/", {}, getToken)
+      authFetch(`${API_URL}/applications/`, {}, getToken)
         .then((res) => {
           if (!res.ok) throw new Error("Failed to load applications.");
           return res.json();

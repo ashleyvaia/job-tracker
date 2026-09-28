@@ -1,6 +1,7 @@
 import type { Application, applicationStatus } from "./App";
 import { useAuth } from "@clerk/react";
 import { authFetch } from "./authFetch";
+import { API_URL } from "./apiUrl";
 import StatusDropdown from "./StatusDropdown";
 import { formatDate } from "./formatDate";
 
@@ -21,7 +22,7 @@ function ApplicationRow({
 
   function handleStatusChange(newStatus: applicationStatus) {
     authFetch(
-      `http://localhost:8000/applications/${application.id}`,
+      `${API_URL}/applications/${application.id}`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -41,7 +42,7 @@ function ApplicationRow({
     if (!confirmed) return;
 
     authFetch(
-      `http://localhost:8000/applications/${application.id}`,
+      `${API_URL}/applications/${application.id}`,
       {
         method: "DELETE",
       },

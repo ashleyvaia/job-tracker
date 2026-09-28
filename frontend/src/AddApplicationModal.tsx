@@ -2,6 +2,7 @@ import type { Application } from "./App";
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/react";
 import { authFetch } from "./authFetch";
+import { API_URL } from "./apiUrl";
 
 interface AddApplicationModalProps {
   isOpen: boolean;
@@ -40,7 +41,7 @@ function AddApplicationModal({
 
     if (editingApplication) {
       authFetch(
-        `http://localhost:8000/applications/${editingApplication.id}`,
+        `${API_URL}/applications/${editingApplication.id}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -70,7 +71,7 @@ function AddApplicationModal({
         .catch((err: Error) => setError(err.message));
     } else {
       authFetch(
-        "http://localhost:8000/applications/",
+        `${API_URL}/applications/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
