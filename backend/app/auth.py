@@ -8,7 +8,10 @@ def get_current_user(request: Request):
         request,
         AuthenticateRequestOptions(
             secret_key=settings.clerk_secret_key,
-            authorized_parties=["http://localhost:5173"],
+            authorized_parties=[
+                "http://localhost:5173",
+                "https://job-tracker-omega-tan.vercel.app",
+            ],
         ),
     )
     if not req_state.is_signed_in:

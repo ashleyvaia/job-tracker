@@ -12,7 +12,10 @@ app.include_router(dashboard.router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://job-tracker-omega-tan.vercel.app",
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
