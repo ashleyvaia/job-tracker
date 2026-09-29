@@ -227,7 +227,30 @@ function App() {
       </div>
     </div>
   ) : (
-    <SignInButton mode="modal" />
+    <div className="min-h-screen flex items-center justify-center p-4 relative">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
+      <div className="card w-full max-w-sm p-8 flex flex-col items-center text-center">
+        <div className="flex items-center gap-2 mb-2">
+          <p className="brand text-3xl leading-none">Job Tracker</p>
+          <Logo size={32} />
+        </div>
+        <p className="text-sm mb-6" style={{ color: "var(--text-2)" }}>
+          Stop wondering if a job listing is still active, and see how
+          consistently you're applying.
+        </p>
+        <SignInButton mode="modal">
+          <button
+            type="button"
+            className="text-sm font-semibold px-5 py-2.5 rounded-full w-full"
+            style={{ background: "var(--accent)", color: "var(--surface)" }}
+          >
+            Get started
+          </button>
+        </SignInButton>
+      </div>
+    </div>
   );
 }
 
