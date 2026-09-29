@@ -161,5 +161,5 @@ behind them — are documented in [`DECISIONS.md`](./DECISIONS.md).
 
 ## What's next
 
-- **Status history + Sankey diagram.** A true Sankey needs a record of every status transition an application went through, not just its current status, which means a new history table and changes to both the create and update routes to log every transition. This was scoped out in favor of the status breakdown view already built, which covers similar ground ("where do things stand") without the added schema and query complexity. See `DECISIONS.md` for the full reasoning.
+- **Status history + Sankey diagram**, scoped out in favor of the current status breakdown view. See `DECISIONS.md` for the reasoning.
 - **LLM-based staleness detection.** The current link-checker uses a fixed list of keywords/phrases to detect closed listings, which misses closures phrased in ways the regex doesn't anticipate. An LLM-based check could catch more of these, at the cost of added latency and cost per check.
