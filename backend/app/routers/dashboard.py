@@ -29,7 +29,7 @@ def get_dashboard_stats(
         .where(Application.user_id == current_user, Application.is_stale)
     ).scalar()
 
-    calculated_stale_rate = 0.0 if total == 0.0 else (stale / total * 100)
+    calculated_stale_rate = 0.0 if total == 0.0 else round(stale / total * 100, 1)
 
     ghost = db.execute(
         select(func.count())
@@ -37,7 +37,7 @@ def get_dashboard_stats(
         .where(Application.user_id == current_user, Application.status == "ghosted")
     ).scalar()
 
-    calculated_ghost_rate = 0.0 if total == 0.0 else (ghost / total * 100)
+    calculated_ghost_rate = 0.0 if total == 0.0 else round(ghost / total * 100, 1)
 
     responses = db.execute(
         select(func.count())
@@ -48,7 +48,7 @@ def get_dashboard_stats(
         )
     ).scalar()
 
-    calculate_response_rate = 0.0 if total == 0.0 else (responses / total * 100)
+    calculate_response_rate = 0.0 if total == 0.0 else round(responses / total * 100, 1)
 
     breakdown = db.execute(
         select(Application.status, func.count())

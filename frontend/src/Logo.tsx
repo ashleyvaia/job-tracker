@@ -55,7 +55,7 @@ function Logo({ size = 32, color = "var(--accent)" }: LogoProps) {
       </defs>
       <g clipPath={`url(#${clipId})`}>
         {dots.map((dot, i) => (
-          <circle key={i} cx={dot.x} cy={dot.y} r={dot.r} fill={color} />
+          <circle key={i} cx={dot.x} cy={dot.y} r={dot.r} style={{ fill: color }} />
         ))}
       </g>
     </svg>
